@@ -1,0 +1,12 @@
+[package]
+name = "luks2-filterstart"
+version = "0.1.0"
+authors = ["Max"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+luks2 = "0.3"
+winapi = { version = "0.3", features = ["errhandlingapi", "fileapi", "fltuser", "fltuserstructures", "handleapi", "impl-debug", "impl-default", "namedpipeapi", "ntstatus", "winbase", "winerror", "winnt"], git = "https://github.com/mvforell/winapi-rs", branch = "0.3" }
+windows-drives = "0.4"
