@@ -7,6 +7,6 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-luks2 = "0.3"
-winapi = { version = "0.3", features = ["errhandlingapi", "fileapi", "fltuser", "fltuserstructures", "handleapi", "impl-debug", "impl-default", "namedpipeapi", "ntstatus", "winbase", "winerror", "winnt"], git = "https://github.com/mvforell/winapi-rs", branch = "0.3" }
-windows-drives = "0.4"
+luks2 = "0.4"
+winapi = { version = "0.3", features = ["errhandlingapi", "fileapi", "handleapi", "impl-debug", "impl-default", "ioapiset", "minwindef", "winbase", "winnt"] }
+windows-drives = "0.5"
