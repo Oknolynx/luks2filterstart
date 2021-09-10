@@ -55,7 +55,7 @@ fn main() -> Result<(), String> {
                     .nth(2)
                     .expect("nullcrypto must be called with the volume number");
                 let volume = open_handle(&format!("\\\\.\\HarddiskVolume{}", vol_nr))?;
-                let msg = create_message(512, 0, 0, &vec![0, 64]);
+                let msg = create_message(512, 0, 0, &vec![0; 64]);
                 let res = send_message(volume, msg);
                 unsafe { CloseHandle(volume) };
                 return res;
