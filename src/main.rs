@@ -39,8 +39,15 @@ struct TargetVolume {
 }
 
 fn main() -> Result<(), String> {
-    if let Some(cmd) = args().nth(1) {
+    let mut target_volume = if let Some(cmd) = args().nth(1) {
         match cmd.as_str() {
+            "start" => {
+                let vol_nr = args()
+                    .nth(2)
+                    .expect("start must be called with the volume number");
+                let vol_nr = vol_nr.parse::<u8>().map_err(|e| e.to_string())?;
+                (vol_nr, open_luks_volume(vol_nr)?)
+            }
             "stop" => {
                 let vol_nr = args()
                     .nth(2)
@@ -62,9 +69,9 @@ fn main() -> Result<(), String> {
             }
             e => return Err(format!("'{}' is not a valid command", e)),
         }
-    }
-
-    let mut target_volume = find_luks_volume().unwrap();
+    } else {
+        find_luks_volume()?
+    };
     let volume = open_handle(&format!("\\\\.\\HarddiskVolume{}", target_volume.0))?;
 
     println!(
@@ -119,6 +126,18 @@ fn find_luks_volume() -> Result<(u8, LuksDevice<BufferedHarddiskVolume>), String
         }
     }
     Err("could not find a luks volume".to_string())
+}
+
+fn open_luks_volume(num: u8) -> Result<LuksDevice<BufferedHarddiskVolume>, String> {
+    let volume = BufferedHarddiskVolume::open(num)?;
+    /*
+    println!("Enter password for luks partition:");
+    let password = luks2::password::read()
+        .map_err(|e| format!("{}", e))?;
+    */
+    let password = "password";
+    let sector_size = volume.geometry.bytes_per_sector as usize;
+    LuksDevice::from_device(volume, password.as_bytes(), sector_size).map_err(|e| e.to_string())
 }
 
 fn create_message(
